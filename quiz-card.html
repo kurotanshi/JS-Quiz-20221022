@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" />
+  <link rel="stylesheet" href="./quiz2.css" />
+  
+  <script
+    src="https://code.jquery.com/jquery-3.6.1.min.js"
+    integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+    crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+  <!-- 容器 -->
+  <div class="card-wrap">
+        
+    <!-- card -->
+    <!-- <div class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front"></div>
+        <div class="flip-card-back">
+          <img src="./img/cat-02.jpg" alt="">
+        </div>
+      </div>
+    </div> -->
+    
+  </div>
+
+
+  <script>
+  // 亂數發牌
+  const numArr = [...new Array(16).keys()].map(i => ++i);
+  numArr.sort(() => Math.random() - 0.5);
+
+  numArr.forEach((e, i) => {
+    const idx = (e % 8) +1;
+    
+    $('.card-wrap').append(`
+      <div class="flip-card">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">${ idx }</div>
+            <div class="flip-card-back">
+              <img src="./img/cat-0${ idx }.jpg" alt="">
+            </div>
+          </div>
+        </div>
+    `);
+  });
+
+  // Q: 完成下列功能
+  // 使用者點擊卡片兩兩配對，當翻到兩張同樣的牌消失，否則蓋牌重來
+  // 全部消失後，顯示點擊次數，並詢問 (window.confirm) 是否重來一局。
+
+  // if(window.confirm('訊息')) {
+  //   console.log('Hi') 
+  // }
+
+  $('.flip-card').on('click', e => {
+    $(e.currentTarget).toggleClass('open');
+    
+    // 自動蓋牌
+    // window.setTimeout(() => {
+    //   $(e.currentTarget).removeClass('open');
+    // }, 1000);
+
+  });
+
+
+
+  </script>
+
+</body>
+</html>
