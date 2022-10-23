@@ -42,7 +42,7 @@
     $('.card-wrap').append(`
       <div class="flip-card">
           <div class="flip-card-inner">
-            <div class="flip-card-front ${ idx }">${ idx }</div>
+            <div class="flip-card-front"></div>
             <div class="flip-card-back">
               <img src="./img/cat-0${ idx }.jpg" alt="">
             </div>
@@ -66,9 +66,11 @@
     }
     if($('.open').length >= 2){
       if(str === $(e.currentTarget).find('img').attr('src')){
-        $('.open').fadeOut(3000, ()=>{
-          $('.open').remove()
-        })
+        // $('.open').fadeOut(3000, ()=>{
+        //   //$('.open').remove()
+        //   console.log(123)
+        // })
+        $('.open').find('.flip-card-front').removeClass('flip-card-front')
       }
       window.setTimeout(() => {
       $('.flip-card').removeClass('open');
