@@ -59,13 +59,11 @@
   //   console.log('Hi') 
   // }
   let str = '';
-  let str2 = '';
   $('.flip-card').on('click', e => {
     $(e.currentTarget).toggleClass('open');
     if($('.open').length === 1){
       str = $(e.currentTarget).find('img').attr('src')
     }
-    console.log($(e.currentTarget).find('img').attr('src'))
     if($('.open').length >= 2){
       if(str === $(e.currentTarget).find('img').attr('src')){
         $('.open').fadeOut(3000, ()=>{
@@ -75,7 +73,6 @@
       window.setTimeout(() => {
       $('.flip-card').removeClass('open');
     }, 1000);
-    console.log($(''))
     }
   });
     //   window.setTimeout(() => {
