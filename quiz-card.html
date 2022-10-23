@@ -42,7 +42,7 @@
     $('.card-wrap').append(`
       <div class="flip-card">
           <div class="flip-card-inner">
-            <div class="flip-card-front"></div>
+            <div class="flip-card-front">${ idx }</div>
             <div class="flip-card-back">
               <img src="./img/cat-0${ idx }.jpg" alt="">
             </div>
@@ -76,12 +76,17 @@
       $('.flip-card').removeClass('open');
     }, 1000);
     }
+    if($('.flip-card-front').length === 0){
+      window.setTimeout(() => {
+        if(window.confirm('遊戲結束！')){
+          window.location.reload();
+        }
+      },2000)
+    }
   });
     //   window.setTimeout(() => {
     //   $(e.currentTarget).removeClass('open');
     // }, 1000);
-
-
   </script>
 
 </body>
