@@ -33,23 +33,27 @@
 
   <script>
   // 亂數發牌
-  const numArr = [...new Array(16).keys()].map(i => ++i);
-  numArr.sort(() => Math.random() - 0.5);
+  function InitCards () {
+    const numArr = [...new Array(16).keys()].map(i => ++i);
+    numArr.sort(() => Math.random() - 0.5);
 
-  numArr.forEach((e, i) => {
-    const idx = (e % 8) +1;
-    
-    $('.card-wrap').append(`
-      <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">${ idx }</div>
-            <div class="flip-card-back">
-              <img src="./img/cat-0${ idx }.jpg" alt="">
+    $('.card-wrap').empty();
+    numArr.forEach((e, i) => {
+      const idx = (e % 8) +1;
+      
+      $('.card-wrap').append(`
+        <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">${ idx }</div>
+              <div class="flip-card-back">
+                <img src="./img/cat-0${ idx }.jpg" alt="">
+              </div>
             </div>
           </div>
-        </div>
-    `);
-  });
+      `);
+    });
+  }
+  InitCards();
 
   // Q: 完成下列功能
   // 使用者點擊卡片兩兩配對，當翻到兩張同樣的牌消失，否則蓋牌重來
@@ -60,16 +64,52 @@
   // }
 
   $('.flip-card').on('click', e => {
-    $(e.currentTarget).toggleClass('open');
+    // $(e.currentTarget).toggleClass('open');
     
     // 自動蓋牌
     // window.setTimeout(() => {
     //   $(e.currentTarget).removeClass('open');
     // }, 1000);
 
+    if ($(e.currentTarget).hasClass('open')) {
+      $(e.currentTarget).removeClass('open');
+    }
+    else if ($('.open').length === 0) {
+      $(e.currentTarget).addClass('open');
+    }
+    else if ($('.open').length === 1) {
+      $(e.currentTarget).addClass('open');
+      if ($('.open img').eq(0).attr('src') === $('.open img').eq(1).attr('src')) {
+
+        // 方法1：讓牌消失
+        $('.open').delay(1000).fadeOut(500, () => { 
+          $('.open').remove();
+          if ($('.flip-card').length === 0 && confirm('破關～（灑花）是否再來一局？')) {
+            InitCards();
+          }
+        });
+/*
+         // 方法2：開過的牌可以維持在相同的位置上
+        window.setTimeout(() => {
+          $('.open').empty();
+          $('.open').removeClass('open');
+          if ($('.flip-card img').length === 0) {
+            window.setTimeout(() => {
+              if (confirm('破關～（灑花）是否再來一局？')) {
+                InitCards();
+              }
+            }, 1000);
+          }
+        }, 1000);
+*/
+      }
+      else {
+        window.setTimeout(() => {
+          $('.open').removeClass('open');
+        }, 1000);
+      }
+    }
   });
-
-
 
   </script>
 

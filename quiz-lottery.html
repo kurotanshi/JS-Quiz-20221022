@@ -30,14 +30,14 @@
       margin-bottom: 10px;
     }
 
-    .lottery-nums .highlight {
-      background-color: red;
-      color: #fff;
-    }
-
     .lottery-nums .selected {
       background-color: green;
       color: #fff;
+    }
+
+    .lottery-nums .highlight {
+      color: fuchsia;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -47,12 +47,13 @@
   <div class="wrap">
 
     <div class="lottery-nums"></div>
-    <div class="lottery-result">開獎號碼: <span></span></div>
 
     <div style="margin-top:1rem;">
-      <button class="">開獎</button>
-      <button class="">重置</button>
+      <button id="lottery">開獎</button>
+      <button id="reset">重置</button>
     </div>
+
+    <div class="lottery-result" style="margin-top:1rem;">開獎號碼:<span></span></div>
 
   </div>
 
@@ -78,7 +79,7 @@
       return lottery;
     };
 
-    const lottery = getLotteryNums();
+    
 
     // 產生 49 顆按鈕
     for (let i = 1; i < 50; i++) {
@@ -90,8 +91,53 @@
     // 2. 開獎後，比對數字，告訴使用者選中的號碼數量
 
     $('.lottery-nums > div').on('click', e => {
-      $(e.target).addClass('selected');
-    })
+      if ($(e.target).hasClass('selected')) {
+        $(e.target).removeClass('selected');
+      }
+      else if ($('.lottery-nums .selected').length < 6) {
+        $(e.target).addClass('selected');
+      }
+      else {
+        alert('只能選擇六個數字！');
+      }
+    });
+    
+    $('#lottery').on ('click', () => {
+      if ($('.lottery-nums .selected').length < 6) {
+        alert('請選擇六個數字之後，再進行開獎。')
+      }
+      else {
+        let matchedCount = 0;
+        const lottery = getLotteryNums();
+
+        lottery.forEach((value, index, array) => {
+          $('.lottery-result').append('<div>' + value + '</div>');
+          $('.lottery-nums > div').eq(value - 1).addClass('highlight');
+          if ($('.lottery-nums > div').eq(value - 1).hasClass('selected')) {
+            matchedCount++;
+          }
+        });
+        //跳訊息前先等一下讓畫面都完成
+        window.setTimeout(() => {
+          if (matchedCount === 0) {
+            alert('未中任何一個號碼，再接再厲～');
+          }
+          else {
+            alert(`恭喜你中了 ${matchedCount} 個號碼！`);
+          }
+        }, 250);
+      }
+    });
+
+    $('#reset').on('click', () => {
+      while ($('.lottery-nums .selected').length > 0) {
+        $('.lottery-nums .selected').first().removeClass('selected');
+      }
+      while ($('.lottery-nums .highlight').length > 0) {
+        $('.lottery-nums .highlight').first().removeClass('highlight');
+      }
+      $('.lottery-result > div').remove();
+    });
 
   </script>
 
