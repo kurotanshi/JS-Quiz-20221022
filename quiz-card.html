@@ -54,23 +54,53 @@
   // Q: 完成下列功能
   // 使用者點擊卡片兩兩配對，當翻到兩張同樣的牌消失，否則蓋牌重來
   // 全部消失後，顯示點擊次數，並詢問 (window.confirm) 是否重來一局。
-
+  // 老師的提示
   // if(window.confirm('訊息')) {
   //   console.log('Hi') 
   // }
 
+  let str = '';
   $('.flip-card').on('click', e => {
-    $(e.currentTarget).toggleClass('open');
-    
-    // 自動蓋牌
-    // window.setTimeout(() => {
+    //被打開的圖片，不能再次被翻開
+    let click = $(e.currentTarget).find('.flip-card-front').is('.flip-card-front')
+    //翻開兩個之後，不能再翻第三個
+    if($('.open').length < 2 && click){
+      $(e.currentTarget).toggleClass('open');
+    }
+    //只有一個 .open 時要運作的項目
+    if($('.open').length === 1){
+      str = $(e.currentTarget).find('img').attr('src')
+    }
+    //兩張一樣時，拿掉封面圖
+    if($('.open').length >= 2){
+      if(str === $(e.currentTarget).find('img').attr('src')){
+        //刪除整個 html DOM 但是介面會易動到
+        // $('.open').fadeOut(3000, ()=>{
+        //   //$('.open').remove()
+        //   console.log(123)
+        // })
+        $('.open').find('.flip-card-front').removeClass('flip-card-front')
+      }
+      
+      window.setTimeout(() => {
+      $('.flip-card').removeClass('open');
+    }, 1000);
+      
+      
+    }
+    //遊戲結束才會跑出視窗
+    if($('.flip-card-front').length === 0){
+      window.setTimeout(() => {
+        if(window.confirm('遊戲結束！')){
+          window.location.reload();
+        }
+      },2000)
+    }
+  });
+    //老師的提示
+    //   window.setTimeout(() => {
     //   $(e.currentTarget).removeClass('open');
     // }, 1000);
-
-  });
-
-
-
   </script>
 
 </body>
