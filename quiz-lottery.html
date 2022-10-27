@@ -81,8 +81,6 @@
       return lottery;
     };
 
-    const lottery = getLotteryNums();
-
     // 產生 49 顆按鈕
     for (let i = 1; i < 50; i++) {
       $('.lottery-nums').append('<div>' + i + '</div>');
@@ -120,6 +118,8 @@
     $('.LotteryDraw').on('click', function() {
       if(candidates.length !== 6)
         return;
+
+      const lottery = getLotteryNums();
 
       // Show user pick
       $('.UserPick > span').text(candidates);
