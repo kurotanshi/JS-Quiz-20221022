@@ -30,7 +30,7 @@
       margin-bottom: 10px;
     }
 
-    .lottery-nums .highlight {
+    .lottery-nums .matched {
       background-color: red;
       color: #fff;
     }
@@ -39,6 +39,12 @@
       background-color: green;
       color: #fff;
     }
+
+    .lottery-nums .lotteryNumber {
+      background-color: rgb(255, 201, 0);
+      color: #fff;
+    }
+
   </style>
 </head>
 
@@ -47,11 +53,13 @@
   <div class="wrap">
 
     <div class="lottery-nums"></div>
+    <div class="UserPick">挑選號碼: <span></span></div>
     <div class="lottery-result">開獎號碼: <span></span></div>
-
+    <div class="MatchResult">中獎號碼: <span></span></div>
     <div style="margin-top:1rem;">
-      <button class="">開獎</button>
-      <button class="">重置</button>
+      <button class="LotteryDraw">開獎</button>
+      <button class="Reset">重選</button>
+      <button class="QuickPick">快選</button>
     </div>
 
   </div>
@@ -78,8 +86,6 @@
       return lottery;
     };
 
-    const lottery = getLotteryNums();
-
     // 產生 49 顆按鈕
     for (let i = 1; i < 50; i++) {
       $('.lottery-nums').append('<div>' + i + '</div>');
@@ -89,9 +95,81 @@
     // 1. 限制使用者只能選六個數字，未滿或超過不給開獎
     // 2. 開獎後，比對數字，告訴使用者選中的號碼數量
 
+    function CheckIsDoubleClick(event, candidates) {
+      let targetNum = Number($(event.target).text());
+      if(candidates.includes(targetNum)) {
+        $(event.target).removeClass('selected matched');
+        candidates.splice(candidates.indexOf(targetNum), 1);
+        return true;
+      }
+      return false;
+    };
+
+    let candidates = [];
     $('.lottery-nums > div').on('click', e => {
+       // Cancel (double-click)
+      if(CheckIsDoubleClick(e, candidates))
+        return;
+
+      if(candidates.length === 6)
+        return;
+
+      candidates.push(Number($(e.target).text()));
       $(e.target).addClass('selected');
-    })
+    });
+
+    // Lottery Draw
+    $('.LotteryDraw').on('click', function() {
+      if(candidates.length !== 6)
+        return;
+
+      const lottery = getLotteryNums();
+
+      // Show user pick
+      $('.UserPick > span').text(candidates);
+      
+      // Show lottery result
+      $('.lottery-result > span').text(lottery);
+      lottery.forEach(function(el) {
+        $('.lottery-nums > div').eq(el - 1).removeClass('selected');
+        $('.lottery-nums > div').eq(el - 1).addClass('lotteryNumber');
+      });
+      // Show match result
+      let matchResult = [];
+      candidates.forEach(function(el) {
+        if(lottery.includes(el)) {
+          matchResult.push(el);
+          $('.lottery-nums > div').eq(el - 1).removeClass('lotteryNumber');
+          $('.lottery-nums > div').eq(el - 1).addClass('matched');
+        }
+      });
+      if(matchResult.length === 0) {
+        $('.MatchResult > span').text('都沒中Q_Q');
+        alert(`都沒中Q_Q`);
+      }
+      else {
+        $('.MatchResult > span').text(matchResult);
+        alert(`中獎號碼為：${matchResult}`);
+      }
+    });
+
+    // Reset
+    $('.Reset').on('click', function() {
+      $('.UserPick > span').text('');
+      $('.lottery-result > span').text('');
+      $('.MatchResult > span').text('');
+      $('.lottery-nums > div').removeClass('selected matched lotteryNumber');
+      candidates = [];
+    });
+
+    // Quick Pick
+    $('.QuickPick').on('click', function() {
+      $('.Reset').trigger('click');
+      candidates = getLotteryNums();
+      candidates.forEach(function(el) {
+        $('.lottery-nums > div').eq(el - 1).addClass('selected');
+      });
+    });
 
   </script>
 
