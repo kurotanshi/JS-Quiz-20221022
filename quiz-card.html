@@ -55,18 +55,45 @@
   // 使用者點擊卡片兩兩配對，當翻到兩張同樣的牌消失，否則蓋牌重來
   // 全部消失後，顯示點擊次數，並詢問 (window.confirm) 是否重來一局。
 
-  // if(window.confirm('訊息')) {
-  //   console.log('Hi') 
-  // }
-
+  let candidates = [];
   $('.flip-card').on('click', e => {
-    $(e.currentTarget).toggleClass('open');
     
-    // 自動蓋牌
-    // window.setTimeout(() => {
-    //   $(e.currentTarget).removeClass('open');
-    // }, 1000);
+    // Prevent clicking multiple cards
+    if($('.open').length === 2)
+      return;
 
+    $(e.currentTarget).toggleClass('open');
+
+    // Prevent double-click on the same card
+    if($('.open').length === 0) {
+      candidates = [];
+      return;
+    }
+    
+    candidates.push(e.target);
+    if(candidates.length === 2) {
+      if($(candidates[0]).text() === $(candidates[1]).text() && $('.open').length === 2) {
+        // If matched: remove pairs
+        $('.open').delay(1000).fadeOut(1500, () => { // 1000 1500
+          $('.open').remove();
+        });
+          // If all pairs are matched: query
+        window.setTimeout(() => {
+          if($('.card-wrap').children().length === 0) {
+            if(window.confirm('是否重來一局？')) {
+              location.reload();
+            }
+          }
+        }, 2600);
+      }
+      else {
+        // Not match: turn over pairs
+        window.setTimeout(() => {
+          $('.open').removeClass('open');
+        }, 1000);
+      }
+      candidates = [];
+    }
   });
 
 
