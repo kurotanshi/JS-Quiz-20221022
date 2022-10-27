@@ -72,7 +72,7 @@
     
     candidates.push(e.target);
     if(candidates.length === 2) {
-      if($(candidates[0]).text() === $(candidates[1]).text() && $('.open').length === 2) {
+      if($(candidates[0]).text() === $(candidates[1]).text()) {
         // If matched: remove pairs
         $('.open').delay(1000).fadeOut(1500, () => { // 1000 1500
           $('.open').remove();
