@@ -40,6 +40,11 @@
       color: #fff;
     }
 
+    .lottery-nums .lotteryNumber {
+      background-color: rgb(255, 201, 0);
+      color: #fff;
+    }
+
   </style>
 </head>
 
@@ -93,8 +98,7 @@
     function CheckIsDoubleClick(event, candidates) {
       let targetNum = Number($(event.target).text());
       if(candidates.includes(targetNum)) {
-        $(event.target).removeClass('selected');
-        $(event.target).removeClass('matched');
+        $(event.target).removeClass('selected matched');
         candidates.splice(candidates.indexOf(targetNum), 1);
         return true;
       }
@@ -126,13 +130,16 @@
       
       // Show lottery result
       $('.lottery-result > span').text(lottery);
-
+      lottery.forEach(function(el) {
+        $('.lottery-nums > div').eq(el - 1).removeClass('selected');
+        $('.lottery-nums > div').eq(el - 1).addClass('lotteryNumber');
+      });
       // Show match result
       let matchResult = [];
       candidates.forEach(function(el) {
         if(lottery.includes(el)) {
           matchResult.push(el);
-          $('.lottery-nums > div').eq(el - 1).removeClass('selected');
+          $('.lottery-nums > div').eq(el - 1).removeClass('lotteryNumber');
           $('.lottery-nums > div').eq(el - 1).addClass('matched');
         }
       });
@@ -151,8 +158,7 @@
       $('.UserPick > span').text('');
       $('.lottery-result > span').text('');
       $('.MatchResult > span').text('');
-      $('.lottery-nums > div').removeClass('selected');
-      $('.lottery-nums > div').removeClass('matched');
+      $('.lottery-nums > div').removeClass('selected matched lotteryNumber');
       candidates = [];
     });
 
