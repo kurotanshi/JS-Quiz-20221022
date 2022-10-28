@@ -33,9 +33,12 @@
 
   <script>
   // 亂數發牌
+
+  function cards(){
   const numArr = [...new Array(16).keys()].map(i => ++i);
   numArr.sort(() => Math.random() - 0.5);
 
+  
   numArr.forEach((e, i) => {
     const idx = (e % 8) +1;
     
@@ -50,7 +53,9 @@
         </div>
     `);
   });
+}
 
+cards();
   // Q: 完成下列功能
   // 使用者點擊卡片兩兩配對，當翻到兩張同樣的牌消失，否則蓋牌重來
   // 全部消失後，顯示點擊次數，並詢問 (window.confirm) 是否重來一局。
@@ -61,15 +66,40 @@
 
   $('.flip-card').on('click', e => {
     $(e.currentTarget).toggleClass('open');
+   
+
+    // 判斷點擊此事件的時候
+    if( $(e.currentTarget).hasClass('open')){
+        $(e.currentTarget).remove('open')
+    }
+    if($('.open').length ===0){
+        $(e.currentTarget).hasClass('open');
+    }else if ($('.open').length ===2){
+        $(e.currentTarget).hasClass('open');
+    }
+
+    // 
+    if($('open img').eq(0).attr('src')===$('open img').eq(1).attr('src')){
+
+    //    移除打開卡片的物件
+    $('.open').delay(1000).fadeOut(400, () => { 
+          $('.open img').remove();
+        });
+
+    }
+
+    
+
+
     
     // 自動蓋牌
-    // window.setTimeout(() => {
-    //   $(e.currentTarget).removeClass('open');
-    // }, 1000);
+    window.setTimeout(() => {
+      $(e.currentTarget).removeClass('open');
+    }, 1000);
 
   });
 
-
+ 
 
   </script>
 
