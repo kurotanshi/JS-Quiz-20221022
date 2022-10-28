@@ -50,8 +50,8 @@
     <div class="lottery-result">開獎號碼: <span></span></div>
 
     <div style="margin-top:1rem;">
-      <button class="">開獎</button>
-      <button class="">重置</button>
+      <button class="box">開獎</button>
+      <button class="reset">重置</button>
     </div>
 
   </div>
@@ -63,7 +63,7 @@
     
   <script type="text/javascript">
 
-    // 取得六個隨機數字
+       // 取得六個隨機數字
     const getLotteryNums = () => {
       let lottery = [], number, n;      
 
@@ -89,9 +89,47 @@
     // 1. 限制使用者只能選六個數字，未滿或超過不給開獎
     // 2. 開獎後，比對數字，告訴使用者選中的號碼數量
 
+    // 當按鈕點擊，限制選取的號碼不能超過6
     $('.lottery-nums > div').on('click', e => {
-      $(e.target).addClass('selected');
-    })
+        if($('.selected').length < 6){
+            $(e.target).addClass('selected')
+        }
+    });
+
+    const seletedBox =$('.selected').length;
+
+    // 設定重設按鈕
+    $('.reset').on('click' ,e => {
+        $('.lottery-nums> div').removeClass('highlight selected');
+    });
+
+    
+    // 執行開獎按鈕
+     $('.box').on('click' ,e =>{
+        $('.lottery-nums > div.highlight').removeClass('highlight')
+
+    //判斷紅色數字
+    for(let i =0; i <lottery.length ;i++){
+        $('.lottery-nums > div').eq(lottery[i]-1).addClass('highlight');
+    } 
+   
+
+    let new_Box ='';
+
+    // 判斷開獎號與逗號分開
+    for (let n =0 ; n <lottery.length; n++){
+        new_Box +=lottery[n];
+        if(n <5){
+            new_Box += ',';
+        }
+    }
+    // 將開獎紀錄丟到內容
+    $('span').text(new_Box);
+
+    let bingo = $('.highlight .selected').length;
+    alert('恭喜您中獎'+bingo+'位數')
+});
+
 
   </script>
 
